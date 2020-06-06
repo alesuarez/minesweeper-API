@@ -1,4 +1,4 @@
-package com.sas.minesweeper.model;
+package com.sas.minesweeper.entities.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

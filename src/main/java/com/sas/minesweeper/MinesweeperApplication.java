@@ -2,11 +2,9 @@ package com.sas.minesweeper;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableAuthorizationServer
-@EnableResourceServer
+@EnableSwagger2
 @SpringBootApplication
 public class MinesweeperApplication {
     public static void main(String[] args) {

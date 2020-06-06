@@ -1,4 +1,4 @@
-package com.sas.config.security;
+package com.sas.minesweeper.util;
 
 public class OAuthConstants {
     public static final String CLIENT_ID = "minesweeperClientId";

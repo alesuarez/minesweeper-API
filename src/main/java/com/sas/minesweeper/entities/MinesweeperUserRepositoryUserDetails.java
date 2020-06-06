@@ -1,19 +1,19 @@
-package com.sas.config.security;
+package com.sas.minesweeper.entities;
 
-import static com.sas.config.security.OAuthConstants.ROLE_USER;
+import static com.sas.minesweeper.util.OAuthConstants.ROLE_USER;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ClientRepositoryUserDetails implements UserDetails, Serializable {
+public class MinesweeperUserRepositoryUserDetails implements UserDetails {
+
     private OAuthMinesweeper oAuthMinesweeper;
 
-    public ClientRepositoryUserDetails(OAuthMinesweeper oAuthMinesweeper) {
+    public MinesweeperUserRepositoryUserDetails(OAuthMinesweeper oAuthMinesweeper) {
         super();
         this.oAuthMinesweeper = oAuthMinesweeper;
     }

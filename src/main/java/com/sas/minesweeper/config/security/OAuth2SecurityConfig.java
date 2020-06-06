@@ -1,4 +1,5 @@
-package com.sas.config.security;
+package com.sas.minesweeper.config.security;
+import com.sas.minesweeper.service.user.MinesweeperUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +16,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EnableOAuth2Client
 public class OAuth2SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired private MinesweeperUserDetailsService userDetailsService;
+    @Autowired
+    private MinesweeperUserDetailsService userDetailsService;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
