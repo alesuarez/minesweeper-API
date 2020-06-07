@@ -9,7 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
+import java.util.List;
 
 
 @Entity
@@ -24,4 +26,7 @@ public class MinesweeperUser {
     private long id;
     private String username;
     private String password;
+
+    @OneToMany(mappedBy="minesweeperUser")
+    private List<GameBoard> gameBoards;
 }

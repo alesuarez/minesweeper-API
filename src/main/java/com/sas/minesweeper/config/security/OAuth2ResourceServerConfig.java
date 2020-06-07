@@ -25,6 +25,7 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/game/**").authenticated()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/**").permitAll()
                 .anyRequest()
