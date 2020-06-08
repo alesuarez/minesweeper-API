@@ -4,13 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sas.minesweeper.entities.Board;
 import com.sas.minesweeper.entities.model.GameBoard;
-import com.sas.minesweeper.service.auth.OAuth2Service;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.Named;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Mapper
 public interface BoardGameMapper {
@@ -23,7 +20,6 @@ public interface BoardGameMapper {
 
     @Named("integerArrayToString")
     static String integerArrayToString(Integer[][] board) {
-
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.writeValueAsString(board);
