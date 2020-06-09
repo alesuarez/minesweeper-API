@@ -1,7 +1,7 @@
 package com.sas.minesweeper.service;
 
-import com.sas.minesweeper.entities.model.GameBoard;
+import com.sas.minesweeper.entities.model.MinesweeperUser;
 
 public interface UserService {
-    void saveNewGame(String username, GameBoard gameBoard);
+    MinesweeperUser getUser(String username);
 }

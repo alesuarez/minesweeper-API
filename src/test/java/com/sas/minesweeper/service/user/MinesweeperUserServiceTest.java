@@ -1,12 +1,13 @@
 package com.sas.minesweeper.service.user;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.sas.minesweeper.entities.model.GameBoard;
 import com.sas.minesweeper.entities.model.MinesweeperUser;
-import com.sas.minesweeper.repository.GameBoardRepository;
+import com.sas.minesweeper.exception.InvalidUserException;
 import com.sas.minesweeper.repository.MinesweeperUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,12 +20,10 @@ import java.util.Optional;
 class MinesweeperUserServiceTest {
 
     @Mock
-    private GameBoardRepository gameBoardRepositoryMock;
-
-    @Mock
     private MinesweeperUserRepository minesweeperUserRepositoryMock;
 
-    @InjectMocks MinesweeperUserService minesweeperUserService;
+    @InjectMocks
+    private MinesweeperUserService minesweeperUserService;
 
     @BeforeEach
     void initMocks() {
@@ -32,17 +31,25 @@ class MinesweeperUserServiceTest {
     }
 
     @Test
-    void saveNewGame_successful() {
+    void saveNewGame_shouldReturnSuccessful() {
         MinesweeperUser minesweeperUser = MinesweeperUser.builder().build();
-
         doReturn(Optional.of(minesweeperUser)).when(minesweeperUserRepositoryMock).findByUsername("usernameTest");
 
-        GameBoard gameBoard = GameBoard.builder()
-                .build();
+        final MinesweeperUser user = minesweeperUserService.getUser("usernameTest");
 
-        minesweeperUserService.saveNewGame("usernameTest", gameBoard);
-
+        assertEquals(minesweeperUser, user);
         verify(minesweeperUserRepositoryMock, times(1)).findByUsername("usernameTest");
-        verify(gameBoardRepositoryMock, times(1)).save(gameBoard);
+    }
+
+    @Test
+    void saveNewGame_shouldThrowInvalidUserException() {
+
+        doReturn(Optional.empty()).when(minesweeperUserRepositoryMock).findByUsername("usernameTest");
+
+        Exception exception = assertThrows(InvalidUserException.class, () -> {
+            minesweeperUserService.getUser("usernameTest");
+        });
+
+        assertEquals("Error user not found", exception.getMessage());
     }
 }

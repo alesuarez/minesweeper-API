@@ -1,5 +1,6 @@
 package com.sas.minesweeper.controller.response;
 
+import com.sas.minesweeper.util.GameStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +13,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GameResponse {
-    private Boolean isGameOver;
+    private Long gameId;
+    private GameStatus gameStatus;
     private LocalDateTime createdDate;
-    private Integer timeSpend;
+    private Long timeSpend;
     private Integer[][] board;
 }
