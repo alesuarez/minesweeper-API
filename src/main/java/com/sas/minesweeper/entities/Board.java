@@ -1,12 +1,19 @@
 package com.sas.minesweeper.entities;
 
 import static com.sas.minesweeper.util.CellContent.BOMB;
-import static com.sas.minesweeper.util.CellContent.MASKED_CELL;
+import static com.sas.minesweeper.util.CellContent.FLAG;
+import static com.sas.minesweeper.util.CellContent.MASK;
 import static com.sas.minesweeper.util.CellContent.NOTHING;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Board {
     private int rowsNumber;
     private int columnsNumber;
@@ -19,7 +26,7 @@ public class Board {
         this.columnsNumber = columnsNumber;
         this.bombsNumber = mines;
         this.board = createEmptyBoard(NOTHING);
-        this.maskedBoard = createEmptyBoard(MASKED_CELL);
+        this.maskedBoard = createEmptyBoard(MASK);
     }
 
     private Integer[][] createEmptyBoard(int value) {
@@ -40,6 +47,9 @@ public class Board {
     }
     public void putMine(int row, int column) {
         this.board[row][column] = BOMB;
+    }
+    public void putFlag(int row, int column) {
+        this.maskedBoard[row][column] = FLAG;
     }
     public int getCell(int row, int column) {
         return this.board[row][column];
