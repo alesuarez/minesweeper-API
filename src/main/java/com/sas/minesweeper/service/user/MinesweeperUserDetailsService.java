@@ -1,10 +1,10 @@
 package com.sas.minesweeper.service.user;
 
+import com.sas.minesweeper.entities.MinesweeperUserRepositoryUserDetails;
 import com.sas.minesweeper.entities.OAuthMinesweeper;
 import com.sas.minesweeper.entities.model.MinesweeperUser;
 import com.sas.minesweeper.exception.InvalidUserException;
 import com.sas.minesweeper.repository.MinesweeperUserRepository;
-import com.sas.minesweeper.entities.MinesweeperUserRepositoryUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

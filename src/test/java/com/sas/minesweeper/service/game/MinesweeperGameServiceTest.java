@@ -4,7 +4,6 @@ import static com.sas.minesweeper.util.GameStatus.GAME_OVER;
 import static com.sas.minesweeper.util.GameStatus.PLAYING;
 import static com.sas.minesweeper.util.ShootType.DISCOVER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -20,6 +19,7 @@ import com.sas.minesweeper.entities.model.GameBoard;
 import com.sas.minesweeper.entities.model.MinesweeperUser;
 import com.sas.minesweeper.mapper.BoardGameMapper;
 import com.sas.minesweeper.mapper.BoardMapper;
+import com.sas.minesweeper.mapper.GameResponseMapper;
 import com.sas.minesweeper.repository.GameBoardRepository;
 import com.sas.minesweeper.service.UserService;
 import com.sas.minesweeper.service.game.strategy.DiscoveryStrategy;
@@ -31,6 +31,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -47,6 +49,9 @@ class MinesweeperGameServiceTest {
 
     @Mock
     private GameBoardRepository gameBoardRepositoryMock;
+
+    @Mock
+    private GameResponseMapper gameResponseMapperMock;
 
     @Mock
     private Map<ShootType, PlayStrategy> strategyMapMock;
@@ -170,5 +175,41 @@ class MinesweeperGameServiceTest {
         verify(strategyMapMock, times(0)).get(any());
         verify(boardGameMapperMock, times(0)).boardToGameBoard(any());
         verify(gameBoardRepositoryMock, times(0)).save(any());
+    }
+
+    @Test
+    public void getAll_shouldReturnGameOver() {
+        GameBoard gameBoard = GameBoard.builder().build();
+        List<GameBoard> gameResponseList = Collections.singletonList(gameBoard);
+        doReturn(gameResponseList).when(gameBoardRepositoryMock).findByMinesweeperUser_Username("usernameTest");
+
+        GameResponse gameResponse = GameResponse.builder().build();
+
+        doReturn(gameResponse).when(gameResponseMapperMock).gameBoardToGameResponse(gameBoard);
+
+        final List<GameResponse> gameResponses = minesweeperGameService.getAll("usernameTest");
+
+        assertEquals(1, gameResponses.size());
+        assertEquals(gameResponse, gameResponses.get(0));
+
+        verify(gameBoardRepositoryMock, times(1)).findByMinesweeperUser_Username("usernameTest");
+        verify(gameResponseMapperMock, times(1)).gameBoardToGameResponse(gameBoard);
+    }
+
+    @Test
+    public void getGame_shouldReturnGameOver() {
+        GameBoard gameBoard = GameBoard.builder().build();
+        doReturn(Optional.of(gameBoard)).when(gameBoardRepositoryMock).findByIdAndMinesweeperUser_Username(1L, "usernameTest");
+
+        GameResponse gameResponse = GameResponse.builder().build();
+
+        doReturn(gameResponse).when(gameResponseMapperMock).gameBoardToGameResponse(gameBoard);
+
+        final GameResponse response = minesweeperGameService.getGame("usernameTest", 1L);
+
+        assertEquals(gameResponse, response);
+
+        verify(gameBoardRepositoryMock, times(1)).findByIdAndMinesweeperUser_Username(1L, "usernameTest");
+        verify(gameResponseMapperMock, times(1)).gameBoardToGameResponse(gameBoard);
     }
 }

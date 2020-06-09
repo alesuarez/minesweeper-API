@@ -13,6 +13,7 @@ import com.sas.minesweeper.entities.model.MinesweeperUser;
 import com.sas.minesweeper.exception.NotFoundGameException;
 import com.sas.minesweeper.mapper.BoardGameMapper;
 import com.sas.minesweeper.mapper.BoardMapper;
+import com.sas.minesweeper.mapper.GameResponseMapper;
 import com.sas.minesweeper.repository.GameBoardRepository;
 import com.sas.minesweeper.service.GameService;
 import com.sas.minesweeper.service.UserService;
@@ -25,7 +26,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class MinesweeperGameService implements GameService {
@@ -43,6 +46,9 @@ public class MinesweeperGameService implements GameService {
 
     @Autowired
     private BoardMapper boardMapper;
+
+    @Autowired
+    private GameResponseMapper gameResponseMapper;
 
     @Autowired
     private GameBoardRepository gameBoardRepository;
@@ -76,7 +82,7 @@ public class MinesweeperGameService implements GameService {
     @Override
     public GameResponse updateGame(String username, UpdateGameRequest updateGameRequest) {
         logger.info("Updating a game for user {}", username);
-        GameBoard gameBoard = getGameBoard(username, updateGameRequest);
+        GameBoard gameBoard = getGameBoard(username, updateGameRequest.getGameId());
 
         Board board = boardMapper.gameBoardToBoard(gameBoard);
 
@@ -85,6 +91,19 @@ public class MinesweeperGameService implements GameService {
         }
 
         return gameResponse(board, gameBoard);
+    }
+
+    @Override
+    public List<GameResponse> getAll(String username) {
+        List<GameBoard> gameBoards = gameBoardRepository.findByMinesweeperUser_Username(username);
+        return gameBoards.stream().map(x -> gameResponseMapper.gameBoardToGameResponse(x))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public GameResponse getGame(String username, Long gameId) {
+        GameBoard gameBoard = getGameBoard(username, gameId);
+        return gameResponseMapper.gameBoardToGameResponse(gameBoard);
     }
 
     private void playGame(UpdateGameRequest updateGameRequest, GameBoard gameBoard, Board board) {
@@ -99,8 +118,8 @@ public class MinesweeperGameService implements GameService {
         updateGameBoard(gameBoard);
     }
 
-    private GameBoard getGameBoard(String username, UpdateGameRequest updateGameRequest) {
-        return gameBoardRepository.findByIdAndMinesweeperUser_Username(updateGameRequest.getGameId(), username)
+    private GameBoard getGameBoard(String username, Long id) {
+        return gameBoardRepository.findByIdAndMinesweeperUser_Username(id, username)
                 .orElseThrow(NotFoundGameException::new);
     }
 
@@ -146,7 +165,7 @@ public class MinesweeperGameService implements GameService {
     }
 
     private void putBombs(Board board) {
-        for (int i = ZERO_INDEX; i < board.getBombsNumber();) {
+        for (int i = ZERO_INDEX; i < board.getBombsNumber(); ) {
             int randomColumn = random(board.getColumnsNumber());
             int randomRow = random(board.getRowsNumber());
 
