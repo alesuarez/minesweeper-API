@@ -4,6 +4,8 @@ Project planning: https://trello.com/b/2UBCv9lz/minesweepergame
 
 Swagger documentation: https://minesweeper-api-springboot.herokuapp.com/minesweeper/swagger-ui.html
 
+Dev notes: [DEV NOTES](DEV_NOTES.md)
+
 API test
 
 We ask that you complete the following challenge to evaluate your development skills. Please use the programming language and framework discussed during your interview to accomplish the following task.
