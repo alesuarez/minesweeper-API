@@ -1,7 +1,7 @@
 package com.sas.minesweeper.service.user;
 
-import com.sas.minesweeper.entities.MinesweeperUserRepositoryUserDetails;
-import com.sas.minesweeper.entities.OAuthMinesweeper;
+import com.sas.minesweeper.entities.dtos.MinesweeperUserRepositoryUserDetails;
+import com.sas.minesweeper.entities.dtos.OAuthMinesweeper;
 import com.sas.minesweeper.entities.model.MinesweeperUser;
 import com.sas.minesweeper.exception.InvalidUserException;
 import com.sas.minesweeper.repository.MinesweeperUserRepository;

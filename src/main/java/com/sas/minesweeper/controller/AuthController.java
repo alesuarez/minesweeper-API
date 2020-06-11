@@ -1,7 +1,7 @@
 package com.sas.minesweeper.controller;
 
 import com.sas.minesweeper.controller.response.AuthResponse;
-import com.sas.minesweeper.entities.OAuthMinesweeper;
+import com.sas.minesweeper.entities.dtos.OAuthMinesweeper;
 import com.sas.minesweeper.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

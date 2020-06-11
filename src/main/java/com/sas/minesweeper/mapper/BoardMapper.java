@@ -2,7 +2,7 @@ package com.sas.minesweeper.mapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sas.minesweeper.entities.Board;
+import com.sas.minesweeper.entities.dtos.Board;
 import com.sas.minesweeper.entities.model.GameBoard;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

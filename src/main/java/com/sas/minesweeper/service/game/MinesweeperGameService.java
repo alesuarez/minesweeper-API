@@ -7,7 +7,7 @@ import static com.sas.minesweeper.util.GameStatus.PLAYING;
 import com.sas.minesweeper.controller.request.NewGameRequest;
 import com.sas.minesweeper.controller.request.UpdateGameRequest;
 import com.sas.minesweeper.controller.response.GameResponse;
-import com.sas.minesweeper.entities.Board;
+import com.sas.minesweeper.entities.dtos.Board;
 import com.sas.minesweeper.entities.model.GameBoard;
 import com.sas.minesweeper.entities.model.MinesweeperUser;
 import com.sas.minesweeper.exception.NotFoundGameException;

@@ -1,4 +1,4 @@
-package com.sas.minesweeper.entities;
+package com.sas.minesweeper.entities.dtos;
 
 import static com.sas.minesweeper.util.OAuthConstants.ROLE_USER;
 

@@ -1,4 +1,4 @@
-package com.sas.minesweeper.error;
+package com.sas.minesweeper.handler;
 
 import com.sas.minesweeper.controller.response.ErrorResponse;
 import com.sas.minesweeper.exception.DuplicateUsernameException;

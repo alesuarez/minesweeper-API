@@ -14,7 +14,7 @@ import static org.mockito.Mockito.verify;
 import com.sas.minesweeper.controller.request.NewGameRequest;
 import com.sas.minesweeper.controller.request.UpdateGameRequest;
 import com.sas.minesweeper.controller.response.GameResponse;
-import com.sas.minesweeper.entities.Board;
+import com.sas.minesweeper.entities.dtos.Board;
 import com.sas.minesweeper.entities.model.GameBoard;
 import com.sas.minesweeper.entities.model.MinesweeperUser;
 import com.sas.minesweeper.mapper.BoardGameMapper;

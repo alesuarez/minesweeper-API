@@ -5,7 +5,7 @@ import static com.sas.minesweeper.utils.TestUtils.assertEqual;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.sas.minesweeper.controller.request.UpdateGameRequest;
-import com.sas.minesweeper.entities.Board;
+import com.sas.minesweeper.entities.dtos.Board;
 import com.sas.minesweeper.util.GameStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
