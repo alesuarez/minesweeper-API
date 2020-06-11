@@ -1,3 +1,31 @@
+# Como levantar la aplicacion
+## Servidor
+- En la carpeta ```devEnviroment``` se encuentra el archivo para levantar la base de datos con docker-compose. Para ello puede utilizar el siguiente comando:
+
+```
+docker-compose up -d
+```
+
+- Para levantar la aplicacion ```spring-boot``` puede ejecutar el siguiente comando:
+
+```
+mnv spring-boot:run
+```
+
+## Client
+- La aplicacion fue desarrollada con ```Python 3```
+- Se encuentra en la carpeta ```client``` antes de ejecutar el cliente debe instalar las dependecias con el comando
+
+```
+pip install -r requirements.txt
+```
+
+Para levantar el servidor ejecutar el siguiente comando en la caperta ```client```
+
+```
+python minesweeper.py 
+```
+
 # Arquitectura de la aplicacion
 
 Se planteo la siguiente arquitectura para la aplicacion:
@@ -30,7 +58,7 @@ Se planteo la siguiente arquitectura para la aplicacion:
 
 ## Consideraciones
 
-- Se utilizo una authenticacion de tipo bearer presente en el header de cada request. La aplicacion tiene la funcion de ser Authorization server y Resource server, con los tokens validos cargados en memoria
+- Se utilizo una autenticacion de tipo bearer presente en el header de cada request. La aplicacion tiene la funcion de ser Authorization server y Resource server, con los tokens validos cargados en memoria
 
 ## Funcionalidades
 
