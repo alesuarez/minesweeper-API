@@ -3,6 +3,8 @@ import json
 import requests
 
 url = 'https://minesweeper-api-springboot.herokuapp.com/minesweeper'
+uri_game = '/game'
+uri_auth = '/auth'
 
 
 def clear():
@@ -10,63 +12,63 @@ def clear():
 
 
 def menu():
-    clear()
-    print('Ingrese la operacion: ')
+
+    print('Enter an option: ')
     print('1 - Login')
     print('2 - Register')
-    print('99 - Salir\n')
+    print('99 - Exit\n')
 
-
-def login(username, password):
+def send_auth(username, password, uri):
     data = {'username': username, 'password': password}
     json_data = json.dumps(data)
     headers = {'Content-type':'application/json', 'Accept':'application/json'}
-    response = requests.post(url + '/auth/login', data=json_data,headers=headers)
+    response = requests.post(url + uri_auth + uri, data=json_data,headers=headers)
+    json_response = response.json()
     if response.status_code == 200:
-        json_response = response.json()
         return True, json_response['authToken']
     else:
-        print('Error... ')
-        print(response.status_code)
-    return False, ''
+        return False, json_response['message']
+
+
+def login(username, password):
+    return send_auth(username, password, '/login')
+
+
+def register(username, password):
+    return send_auth(username, password, '/register')
 
 
 def send_post_request(auth_token, data):
     json_data = json.dumps(data)
     token = 'Bearer ' + auth_token
     headers = {'Content-type': 'application/json', 'Accept': 'application/json', 'Authorization': token}
-    response = requests.post(url + '/game', data=json_data, headers=headers)
+    response = requests.post(url + uri_game, data=json_data, headers=headers)
     if response.status_code == 200:
         return True, response.json()
     else:
-        print('Error... ')
-        print(response.status_code)
-    return False, ''
+        return False, ''
 
 
 def send_put_request(auth_token, data):
     json_data = json.dumps(data)
     token = 'Bearer ' + auth_token
     headers = {'Content-type': 'application/json', 'Accept': 'application/json', 'Authorization': token}
-    response = requests.put(url + '/game', data=json_data, headers=headers)
+    response = requests.put(url + uri_game, data=json_data, headers=headers)
     if response.status_code == 200:
-        return True, response.json()
+        response_json = response.json()
+        return True, response_json['board'], response_json['gameStatus'], response_json['gameId']
     else:
-        print('Error... ')
-        print(response.status_code)
-    return False, ''
+        return False, '', '', ''
 
 
 def send_get_request(auth_token):
     token = 'Bearer ' + auth_token
     headers = {'Content-type': 'application/json', 'Accept': 'application/json', 'Authorization': token}
-    response = requests.get(url + '/game', headers=headers)
+    response = requests.get(url + uri_game, headers=headers)
     if response.status_code == 200:
         return True, response.json()
     else:
-        print('Error... ')
-        print(response.status_code)
-    return False, ''
+        return False, ''
 
 
 def new_game(row, column, bombs, auth_token):
@@ -100,16 +102,18 @@ def show_board(board):
 
 def send_play(row, column, game_id, shoot_type, auth_token):
     data = {'column': column, 'gameId': game_id, 'row': row, 'shootType': shoot_type}
-    _, json_response = send_put_request(auth_token, data)
-    return json_response['board'], json_response['gameStatus'], json_response['gameId']
+    _, board, game_status, game_id = send_put_request(auth_token, data)
+    return board, game_status, game_id
 
 
 def get_shoot_type():
-    shoot_choose = input('Discover or Flag cell? 1/2 >> ')
-    if shoot_choose == 1:
+    shoot_choose = input('Discover(1) or Flag(2) cell or EXIT(99)? 1/2/99 >> ')
+    if shoot_choose == '1':
         return 'DISCOVER'
-    if shoot_choose == 2:
+    if shoot_choose == '2':
         return 'FLAG'
+    if shoot_choose == '99':
+        return 'EXIT'
 
 
 def play(board, game_status, game_id, auth_token):
@@ -118,29 +122,39 @@ def play(board, game_status, game_id, auth_token):
         show_board(board)
         print('Enter nex move..')
         shoot_type = get_shoot_type()
+        if shoot_type == 'EXIT':
+            break
         row = input('Row >> ')
         column = input('Column >> ')
-        board, game_status, game_id = send_play(row, column, game_id, shoot_type, auth_token)
+        board, game_status, game_id = send_play(int(row), int(column), int(game_id), shoot_type, auth_token)
     clear()
-    if game_status == 'GAME_OVE':
+    if game_status == 'EXIT':
+        return
+    if game_status == 'GAME_OVER':
         print('GAME OVER!!! try again :)')
     if game_status == 'WIN':
         print('YOU WIN!!! Congrats!! :)')
+    print('')
+    show_board(board)
+    input('\n\nPress a key to continue...')
 
 
 def retrieve_old(auth_token):
     _, json_response = send_get_request(auth_token)
+    clear()
+    print('===============================================')
     print('ID - creation date - game status - time spend')
+    print('===============================================')
     i = 0
     for response in json_response:
         create_date = response['createdDate']
         game_status = response['gameStatus']
         time_spend = response['timeSpend']
-        print('{} - {} {} {} '.format(i, create_date, game_status, time_spend))
+        print('{} - date: {} status: {} time spend: {} seconds '.format(i, create_date, game_status, time_spend))
         i += 1
-    game_choose = input('Input game ID >> ')
+    game_choose = input('\n\nID >> ')
     game = json_response[int(game_choose)]
-    play(game['board'], game['gameStatus'], game['gameId'], auth_token)
+    play(game['board'], game['gameStatus'], int(game['gameId']), auth_token)
 
 
 def process_game(game_option, auth_token):
@@ -157,25 +171,41 @@ def process_game(game_option, auth_token):
 
 
 def user_screen(auth_token):
-    clear()
-    print('Ingrese la operacion: ')
-    print('1 - New game')
-    print('2 - Resume old one')
-    print('99 - Exit \n')
-    game_option = input('Enter username >> ')
-    process_game(game_option, auth_token)
+    game_option = ''
+    while game_option != '99':
+        clear()
+        print('Enter an option: ')
+        print('1 - New game')
+        print('2 - Resume old one')
+        print('99 - back \n')
+        game_option = input('Option >> ')
+        process_game(game_option, auth_token)
 
 
 def process_option(option):
+    username = input('Enter username >> ')
+    password = input('Enter password >> ')
     if option == '1':
-        username = input('Enter username >> ')
-        password = input('Enter password >> ')
-        success, auth_token  = login(username, password)
-        if success:
-            user_screen(auth_token)
-
+        success, response  = login(username, password)
+    if option == '2':
+        success, response  = register(username, password)
+    if success:
+        user_screen(response)
+    else:
+        clear()
+        print(response)
+        input('\n\nPress a key to continue...')
 
 while True:
+    clear()
+    print(' ___  ___ _               _____                                          ')
+    print(' |  \/  |(_)             /  ___|                                         ')
+    print(' | .  . | _  _ __    ___ \ `--. __      __  ___   ___  _ __    ___  _ __ ')
+    print(' | |\/| || || \'_ \  / _ \ `--. \\ \ /\ / / / _ \ / _ \| \'_ \  / _ \| \'__|')
+    print(' | |  | || || | | ||  __//\__/ / \ V  V / |  __/|  __/| |_) ||  __/| |   ')
+    print(' \_|  |_/|_||_| |_| \___|\____/   \_/\_/   \___| \___|| .__/  \___||_|   ')
+    print('                                                     | |                ')
+    print('                                                     |_|                ')
     menu()
     op = input('Choose from menu >> ')
     process_option(op)
