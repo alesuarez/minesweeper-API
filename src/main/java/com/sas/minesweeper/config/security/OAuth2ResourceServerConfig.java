@@ -3,7 +3,6 @@ package com.sas.minesweeper.config.security;
 import static com.sas.minesweeper.util.OAuthConstants.RESOURCE_ID;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -26,8 +25,6 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                .antMatchers("/game").authenticated()
                 .antMatchers("/auth/**").permitAll()
                 .and()
                 .exceptionHandling()
