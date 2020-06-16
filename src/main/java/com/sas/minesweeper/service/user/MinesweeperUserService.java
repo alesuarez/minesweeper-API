@@ -20,7 +20,7 @@ public class MinesweeperUserService implements UserService {
     public MinesweeperUser getUser(String username) {
         return minesweeperUserRepository.findByUsername(username).orElseThrow(() -> {
             logger.error("Error user {} not found", username);
-            throw new InvalidUserException("Error user not found");
+            return new InvalidUserException("Error user not found");
         });
     }
 }
