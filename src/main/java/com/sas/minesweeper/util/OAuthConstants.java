@@ -12,4 +12,6 @@ public class OAuthConstants {
     public static final String AUTHORIZED_GRANT_TYPES_PASSWORD = "password";
     public static final String AUTHORIZED_GRANT_TYPES_AUTHORIZATION_CODE = "authorization_code";
     public static final String AUTHORIZED_GRANT_TYPES_REFRESH_TOKEN = "refresh_token";
+    public static final String ALL_PATHS = "/**";
+    public static final String PERMIT_ALL = "*";
 }

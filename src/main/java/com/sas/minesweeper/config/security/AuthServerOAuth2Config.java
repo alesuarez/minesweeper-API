@@ -67,4 +67,6 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     public JwtAccessTokenConverter accessTokenConverter() {
         return new JwtAccessTokenConverter();
     }
+
+
 }
